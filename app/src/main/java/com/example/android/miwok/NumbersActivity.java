@@ -28,7 +28,7 @@ public class NumbersActivity extends AppCompatActivity {
 
 
         for(int i=0;i<10;i++)
-        Log.v("NumbersActivity","Words at index " + (i+1) + " "+ words.get(i));
+        Log.v("NumbersActivity","Words at index" + (i+1) + " "+ words.get(i));
 
     }
 }
