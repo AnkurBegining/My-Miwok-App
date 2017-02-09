@@ -8,7 +8,9 @@ public class words {
 
     private String mDefaultTranslation;
     private  String mMiwokTranslation;
-    private int mImageResourceId;
+    private int mImageResourceId=NO_IMAGE_PROVIDED;
+
+    private static final int NO_IMAGE_PROVIDED = -1;
 
     public  words(String defaultTranslation, String miwokTranslation){
         mDefaultTranslation=defaultTranslation;
@@ -34,5 +36,9 @@ public class words {
 
     public int getImageResourceId(){
         return mImageResourceId;
+    }
+
+    public boolean hasImage(){
+        return mImageResourceId!=NO_IMAGE_PROVIDED;
     }
 }

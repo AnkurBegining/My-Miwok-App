@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         family.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(v.getContext(),"Family Memeber", Toast.LENGTH_SHORT).show();
                 Intent familyIntent=new Intent(MainActivity.this ,FamilyActivity.class);
                 startActivity(familyIntent);
             }
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         colors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(v.getContext(),"Colors", Toast.LENGTH_SHORT).show();
                 Intent colorIntent=new Intent(MainActivity.this, ColorsActivity.class);
                 startActivity(colorIntent);
             }
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         phrases.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(v.getContext(),"Phrases", Toast.LENGTH_SHORT).show();
                 Intent phrasesIntent=new Intent(MainActivity.this, PhrasesActivity.class);
                 startActivity(phrasesIntent);
             }

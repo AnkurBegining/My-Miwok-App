@@ -42,7 +42,13 @@ public class WordAdapter extends ArrayAdapter<words> {
         numberTextView.setText(currentWord.getmMiwokTranslation());
 
         ImageView iconImageView = (ImageView) listItemView.findViewById(R.id.icon_image_view);
-        iconImageView.setImageResource(currentWord.getImageResourceId());
+        if(currentWord.hasImage()){
+            iconImageView.setImageResource(currentWord.getImageResourceId());
+            iconImageView.setVisibility(View.VISIBLE);
+        }
+        else{
+            iconImageView.setVisibility(View.GONE);
+        }
 
         return listItemView;
     }
