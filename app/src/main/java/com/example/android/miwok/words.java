@@ -8,10 +8,18 @@ public class words {
 
     private String mDefaultTranslation;
     private  String mMiwokTranslation;
+    private int mImageResourceId;
 
     public  words(String defaultTranslation, String miwokTranslation){
         mDefaultTranslation=defaultTranslation;
         mMiwokTranslation=miwokTranslation;
+    }
+
+    public  words(String defaultTranslation, String miwokTranslation,int imageResourceId){
+        mDefaultTranslation=defaultTranslation;
+        mMiwokTranslation=miwokTranslation;
+        mImageResourceId=imageResourceId;
+
     }
 
     public String getmDefaultTranslation()
@@ -22,5 +30,9 @@ public class words {
     public String getmMiwokTranslation()
     {
         return  mMiwokTranslation;
+    }
+
+    public int getImageResourceId(){
+        return mImageResourceId;
     }
 }
