@@ -10,6 +10,13 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class ColorsActivity extends AppCompatActivity {
+    private MediaPlayer mediaPlayer;
+    private MediaPlayer.OnCompletionListener mMediaResource = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            releseMediaResource();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +44,24 @@ public class ColorsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 words w=word.get(position);
-                MediaPlayer mediaPlayer=MediaPlayer.create(ColorsActivity.this,w.getmAudioResourceID());
+                releseMediaResource();
+                mediaPlayer=MediaPlayer.create(ColorsActivity.this,w.getmAudioResourceID());
                 mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(mMediaResource);
 
             }
         });
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releseMediaResource();
+    }
+
+    private void releseMediaResource(){
+        if(mediaPlayer !=null){
+            mediaPlayer.release();
+            mediaPlayer=null;
+        }
     }
 }

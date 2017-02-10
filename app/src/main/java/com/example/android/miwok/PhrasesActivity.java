@@ -11,10 +11,20 @@ import java.util.ArrayList;
 
 public class PhrasesActivity extends AppCompatActivity {
 
+    MediaPlayer mediaPlayer;
+
+
+    private MediaPlayer.OnCompletionListener mMediaResource = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            relaseMediaResource();
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
+
 
 
         final ArrayList<words> word=new ArrayList<words>();
@@ -44,10 +54,23 @@ public class PhrasesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 words w=word.get(position);
-                MediaPlayer mediaPlayer=MediaPlayer.create(PhrasesActivity.this,w.getmAudioResourceID());
-                mediaPlayer.start();
+                relaseMediaResource();
+                 mediaPlayer=MediaPlayer.create(PhrasesActivity.this,w.getmAudioResourceID());
+                 mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(mMediaResource);
 
             }
         });
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        relaseMediaResource();
+    }
+    private void relaseMediaResource(){
+        if(mediaPlayer !=null){
+            mediaPlayer.release();
+            mediaPlayer =null;
+        }
     }
 }

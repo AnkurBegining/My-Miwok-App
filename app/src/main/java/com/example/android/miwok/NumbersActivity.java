@@ -18,6 +18,13 @@ import java.util.ArrayList;
 public class NumbersActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
+
+    private MediaPlayer.OnCompletionListener mMediaResource =new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            relaseMediaResource();
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +49,7 @@ public class NumbersActivity extends AppCompatActivity {
 
 
          WordAdapter adapter=
-                new WordAdapter( this ,word,R.color.category_numbers);
+                new WordAdapter( NumbersActivity.this ,word,R.color.category_numbers);
 
         ListView listView=(ListView) findViewById(R.id.list);
 
@@ -52,15 +59,26 @@ public class NumbersActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 words w=word.get(position);
+                relaseMediaResource();
                 mediaPlayer = MediaPlayer.create(NumbersActivity.this, w.getmAudioResourceID());
                 mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(mMediaResource);
 
 
             }
         });
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        relaseMediaResource();
+    }
 
-
-
+    private void relaseMediaResource(){
+        if(mediaPlayer !=null){
+            mediaPlayer.release();
+            mediaPlayer =null;
+        }
     }
 }
