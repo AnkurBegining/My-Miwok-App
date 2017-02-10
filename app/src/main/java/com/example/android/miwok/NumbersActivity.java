@@ -1,5 +1,7 @@
 package com.example.android.miwok;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.provider.UserDictionary;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,23 @@ import java.util.ArrayList;
 public class NumbersActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
+    AudioManager audioManager;
+
+    AudioManager.OnAudioFocusChangeListener afChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+                public void onAudioFocusChange(int focusChange) {
+                    if (focusChange == AudioManager.AUDIOFOCUS_LOSS || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                        // Permanent loss of audio focus
+                        // Pause playback immediately
+                        mediaPlayer.pause();
+                        mediaPlayer.seekTo(0);
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                        relaseMediaResource();
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                        mediaPlayer.start();
+                    }
+                }
+                };
 
     private MediaPlayer.OnCompletionListener mMediaResource =new MediaPlayer.OnCompletionListener() {
         @Override
@@ -26,11 +45,12 @@ public class NumbersActivity extends AppCompatActivity {
         }
     };
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
 
-
+        audioManager =(AudioManager)getSystemService(Context.AUDIO_SERVICE);
         final ArrayList<words> word=new ArrayList<words>();
 
         word.add(new words("one","lutti",R.drawable.number_one,R.raw.number_one));
@@ -48,7 +68,7 @@ public class NumbersActivity extends AppCompatActivity {
 
 
 
-         WordAdapter adapter=
+         final WordAdapter adapter=
                 new WordAdapter( NumbersActivity.this ,word,R.color.category_numbers);
 
         ListView listView=(ListView) findViewById(R.id.list);
@@ -60,9 +80,17 @@ public class NumbersActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 words w=word.get(position);
                 relaseMediaResource();
-                mediaPlayer = MediaPlayer.create(NumbersActivity.this, w.getmAudioResourceID());
-                mediaPlayer.start();
-                mediaPlayer.setOnCompletionListener(mMediaResource);
+
+                int result =audioManager.requestAudioFocus(afChangeListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+
+                    mediaPlayer = MediaPlayer.create(NumbersActivity.this, w.getmAudioResourceID());
+                    mediaPlayer.start();
+                    mediaPlayer.setOnCompletionListener(mMediaResource);
+                }
+
+
+
 
 
             }
@@ -79,6 +107,8 @@ public class NumbersActivity extends AppCompatActivity {
         if(mediaPlayer !=null){
             mediaPlayer.release();
             mediaPlayer =null;
+            audioManager.abandonAudioFocus(afChangeListener);
         }
     }
 }
+
